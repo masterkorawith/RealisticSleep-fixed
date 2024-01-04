@@ -1,0 +1,4 @@
+name: RealisticSleep
+version: '${version}'
+main: net.sideways_sky.realisticsleep.RealisticSleep
+api-version: '1.20'
