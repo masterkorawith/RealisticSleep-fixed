@@ -22,7 +22,7 @@ public class SleepingWorld {
     private TextComponent getPlayersSleepText(){
         return Component.text(sleepers.size() + "/" + numSleepersNeeded + " players sleeping" +
                 (numInBedNotSleep > 0 ? " (" + numInBedNotSleep + " going to sleep)" : "") +
-                (RealisticSleep.instance.skipper.isSkipping() ? " " + Math.round(((float) ((world.getTime() - NightEnd) * 100) / NightDir) + 100) + "%" : ""));
+                (RealisticSleep.instance.skipper.isSkipping ? " " + Math.round(((float) ((world.getTime() - NightEnd) * 100) / NightDir) + 100) + "%" : ""));
     }
     public void update(){
         numSleepersNeeded = (world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE) / 100) * world.getPlayers().size();
@@ -30,13 +30,15 @@ public class SleepingWorld {
         numInBedNotSleep = (int) world.getPlayers().stream().filter(player -> player.isSleeping() && !player.isDeeplySleeping()).count();
         boolean gotNeededSleepers = sleepers.size() / numSleepersNeeded >= 1;
 
-        if(RealisticSleep.instance.skipper.isSkipping() && !gotNeededSleepers){
+        if(RealisticSleep.instance.skipper.isSkipping && !gotNeededSleepers){
             RealisticSleep.instance.skipper.stop();
-        } else if(!RealisticSleep.instance.skipper.isSkipping() && gotNeededSleepers){
+        } else if(!RealisticSleep.instance.skipper.isSkipping && gotNeededSleepers){
             RealisticSleep.instance.skipper.start((int) (NightEnd - world.getTime()));
         }
     }
     public void sendSleepingUpdate(){
         world.getPlayers().forEach(player -> player.sendActionBar(getPlayersSleepText()));
     }
+
+
 }

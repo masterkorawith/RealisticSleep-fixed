@@ -15,7 +15,4 @@ public final class RealisticSleep extends JavaPlugin {
                 getConfig().getInt("night-skip-speed"));
         Bukkit.getPluginManager().registerEvents(new Events(), this);
     }
-    public static void ConsoleSend(String message){
-        Bukkit.getConsoleSender().sendMessage(message);
-    }
 }
