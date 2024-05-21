@@ -43,7 +43,7 @@ public class Skipper {
         bukkitManager = Bukkit.getServerTickManager();
 
         try {
-            Class<?> clazz = Class.forName("org.bukkit.craftbukkit.v1_20_R3.CraftServerTickManager");
+            Class<?> clazz = cbClass("CraftServerTickManager");
             Field manager = clazz.getDeclaredField("manager");
             manager.setAccessible(true);
             nmsManager = (ServerTickRateManager) manager.get(bukkitManager);
@@ -51,5 +51,10 @@ public class Skipper {
             Bukkit.getLogger().warning("Failed to fetch ServerTickRateManager - defaulting to bukkitManager");
         }
 
+    }
+
+    private final String CRAFTBUKKIT_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
+    public Class<?> cbClass(String clazz) throws ClassNotFoundException {
+        return Class.forName(CRAFTBUKKIT_PACKAGE + "." + clazz);
     }
 }
