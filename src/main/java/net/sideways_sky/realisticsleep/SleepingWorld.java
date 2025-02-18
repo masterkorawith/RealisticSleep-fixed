@@ -20,7 +20,7 @@ public class SleepingWorld {
     private List<Player> sleepers;
     private int numInBedNotSleep;
     private TextComponent getPlayersSleepText(){
-        return Component.text(sleepers.size() + "/" + numSleepersNeeded + " players sleeping" +
+        return Component.text((numSleepersNeeded > 0  ? sleepers.size() + "/" + numSleepersNeeded + " player(s) sleeping" : "") +
                 (numInBedNotSleep > 0 ? " (" + numInBedNotSleep + " going to sleep)" : "") +
                 (RealisticSleep.instance.skipper.isSkipping ? " " + Math.round(((float) ((world.getTime() - NightEnd) * 100) / NightDir) + 100) + "%" : ""));
     }
@@ -29,9 +29,10 @@ public class SleepingWorld {
         sleepers = world.getPlayers().stream().filter(HumanEntity::isDeeplySleeping).toList();
         numInBedNotSleep = (int) world.getPlayers().stream().filter(player -> player.isSleeping() && !player.isDeeplySleeping()).count();
         if (numSleepersNeeded == 0) {
-           if(!RealisticSleep.instance.skipper.isSkipping){
+            if(!RealisticSleep.instance.skipper.isSkipping){
                 RealisticSleep.instance.skipper.start((int) (NightEnd - world.getTime()));
             }
+            return;
         }
         boolean gotNeededSleepers = sleepers.size() / numSleepersNeeded >= 1;
 
